@@ -2,15 +2,14 @@
 @model MovieSolution.Areas.Identity.Pages.Account.RegisterModel
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register new account";
 }
 
-<h1>@ViewData["Title"]</h1>
 <div class="row" style="margin:50px">
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
-                <h2>Register new account</h2>
+                <h1>@ViewData["Title"]</h1>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating" style="margin:10px">
@@ -32,6 +31,9 @@
                     <button id="register-submit" type="submit" class="w-100 btn-lg btn btn-primary">Register</button>
                 </div>
             </form>
+            <div class="mt-5 back-link">
+                <a href="~/">Back to start page</a>
+            </div>
         </section>
     </div>
 </div>

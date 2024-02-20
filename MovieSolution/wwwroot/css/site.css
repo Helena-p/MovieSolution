@@ -27,3 +27,8 @@ h1:focus {
     border-color: #929292;
 }
 
+.back-link > a {
+    color: currentColor;
+    text-underline-offset: 5px;
+}
+
