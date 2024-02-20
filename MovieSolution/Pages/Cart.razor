@@ -1,0 +1,87 @@
+﻿@page "/cart"
+
+<PageTitle>Shoppingcart</PageTitle>
+
+<h1 class="my-5">Shoppingcart</h1>
+<div class="row mb-5">
+    <div class="row">
+        <div class="col-md-8">
+            @if (CartItems.Count() > 0)
+            {
+                @foreach (var item in CartItems)
+                {
+                    <div class="row">
+                        <div class="col-12 col-md-7">
+                            <div class="row">
+                                <div class="col-3 col-sm-2">
+                                    <img src="@item.ImageURL" width="40" class="img-thumbnail" alt="">
+                                </div>
+                                <div class="col-8 col-sm-10">
+                                    <h5>@item.ProductName</h5>
+                                    <p>@item.Price.ToString("C") </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="row">
+                                <div class="col-4 col-sm-5 col-md-8">
+                                    <div class="btn-group align-content-center" role="group" aria-label="Basic example">
+                                        <button type="button"
+                                                class="btn btn-primary"
+                                                @onclick="() => DecreaseQty(item)">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <span class="btn-qty"><b>@item.Quantity</b></span>
+                                        <button type="button"
+                                                class="btn btn-primary"
+                                                @onclick="() => IncreaseQty(item)">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-danger sm"
+                                            aria-label="Remove product from cart"
+                                            @onclick="(() => RemoveItem(item.ProductId))">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-2" />
+                }
+            }
+            else
+            {
+                <p>No item in the cart.</p>
+            }
+        </div>
+        <div class="col-md-3">
+            <h5>Cart Summary</h5>
+            <div class="mt-2">
+                <div>Total - (@TotalQuantity items)&nbsp;<b>@TotalPrice</b></div>
+                <AuthorizeView>
+                    <Authorized>
+                        <a href="checkout" class="btn btn-success mt-4">
+                            <span class="oi oi-credit-card"></span>&nbsp;Proceed to Checkout
+                        </a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a class="btn btn-info mt-4">
+                            <span class="oi oi-credit-card"></span>&nbsp;Log in to proceed
+                        </a>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-qty {
+        padding: 0.43rem;
+        background: #0d6efd;
+    }
+</style>

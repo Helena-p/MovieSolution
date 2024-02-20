@@ -1,0 +1,37 @@
+﻿@page
+@model MovieSolution.Areas.Identity.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row" style="margin:50px">
+    <div class="col-md-4">
+        <section>
+            <form id="account" method="post">
+                <h2>Register new account</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating" style="margin:10px">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"/>
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating" style="margin:10px">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating" style="margin:10px">
+                    <input asp-for="Input.Role" class="form-control" autocomplete="role" aria-required="true" />
+                    <label asp-for="Input.Role" class="form-label"></label>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+                <div style="margin:10px">
+                    <button id="register-submit" type="submit" class="w-100 btn-lg btn btn-primary">Register</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

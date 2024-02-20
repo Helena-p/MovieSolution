@@ -1,0 +1,51 @@
+﻿@page "/"
+
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Home</PageTitle>
+<h1 class="my-5">Welcome to explore the world of movies!</h1>
+@if(Products == null)
+{
+    <div class="container">       
+       <Spinner />
+    </div>
+}
+else
+{
+    <div class="container">
+        <h2 class="pt-5">Newly added</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+        @foreach(var product in Products.OrderByDescending(p => p.ReleaseYear).Take(4))
+        {
+            <ProductCard Product="@product"/>
+        }
+        </div>
+         <h2 class="pt-5">Classics</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+            @foreach (var product in Products.OrderBy(p => p.ReleaseYear).Take(4))
+            {
+                <ProductCard Product="@product" />
+            }
+        </div>
+        <h2 class="pt-5">Best price</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+            @foreach (var product in Products.OrderBy(p => p.Price).Take(5))
+            {
+                <ProductCard Product="@product" />
+            }
+        </div> 
+    </div>
+   
+}
+
+@code {
+    private List<ProductModel>? Products { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductService.GetItems();
+    }
+}
+

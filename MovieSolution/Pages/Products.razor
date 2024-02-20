@@ -1,0 +1,25 @@
+﻿@page "/products"
+
+<PageTitle>Movies</PageTitle>
+<h1 class="my-5">Movies by category</h1>
+@if (AllProducts == null)
+{
+    <div class="container">
+        <Spinner />
+    </div>
+}
+else
+{
+    <div class="container">
+        @foreach (var categoryGroup in AllProducts.GroupBy(p => p.CategoryName))
+        {
+            <h2 class="pt-5">@categoryGroup.Key</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+                @foreach (var product in categoryGroup)
+                {
+                    <ProductCard Product="@product" />
+                }
+            </div>
+        }       
+    </div>
+}

@@ -1,0 +1,37 @@
+﻿@page "/checkout"
+
+@inject ICartService CartService
+@inject ProtectedSessionStorage ProtectedSessionStore
+
+<PageTitle>Checkout</PageTitle>
+
+
+<PageTitle>Checkout</PageTitle>
+
+<h1 class="my-5">Checkout</h1>
+
+<div class="row mb-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>My Order</h4>
+            <form>
+                <label class="form-check-label">
+                    Payment method Invoice:&nbsp;
+                    <input type="checkbox" checked="true" class="form-check-input" />
+                </label>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <div class="mt-2">
+                <div>Total - </div>
+                <a href="" class="btn btn-success mt-4">
+                    <span class="oi oi-credit-card"></span>&nbsp;Place Order
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+}
