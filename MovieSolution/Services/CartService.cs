@@ -9,7 +9,10 @@ namespace MovieSolution.Services
     {
         protected ProtectedSessionStorage ProtectedSessionStore { get; set; }
         public List<CartItemModel> cartItems { get; set; } = new List<CartItemModel>();
+        public string TotalPrice { get; set; } = string.Empty;
+        public string TotalQuantity { get; set; } = string.Empty;
         private string _key = "Cart";
+        public event EventHandler CartUpdated;
 
         public CartService(ProtectedSessionStorage protectedSessionStorage)
         {
@@ -37,6 +40,7 @@ namespace MovieSolution.Services
                 }
 
                 cartItems = JsonSerializer.Deserialize<List<CartItemModel>>(result.Value);
+                CalculateCartSummaryTotals(cartItems);
                 return cartItems;
             }
             catch (Exception ex)
@@ -74,6 +78,7 @@ namespace MovieSolution.Services
             {
                 var json = JsonSerializer.Serialize(items);
                 await ProtectedSessionStore.SetAsync(_key, json);
+                CalculateCartSummaryTotals(items);
             }
             catch (Exception ex)
             {
@@ -81,5 +86,14 @@ namespace MovieSolution.Services
                 throw;
             }
         }
+
+        public void CalculateCartSummaryTotals(List<CartItemModel> items)
+        {
+            TotalPrice = items.Sum(p => p.Quantity * p.Price).ToString("C");
+            TotalQuantity = items.Sum(p => p.Quantity).ToString();
+            // Notify subscribers whenever the cart changes
+            CartUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
     }
 }

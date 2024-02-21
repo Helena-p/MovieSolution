@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using MovieSolution.Models;
+using MovieSolution.Services;
 using MovieSolution.Services.Interfaces;
 
 namespace MovieSolution.Pages
@@ -15,24 +16,42 @@ namespace MovieSolution.Pages
         }
 
         public List<CartItemModel> CartItems { get; set; } = new List<CartItemModel>();
-        protected string TotalPrice { get; set; } = string.Empty;
-        protected string TotalQuantity { get; set; } = string.Empty;
+        private string totalPrice { get; set; } = string.Empty;
+        private string totalQuantity { get; set; } = string.Empty;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            // Listens for Cart event
+            cartService.CartUpdated += OnCartUpdated;
+        }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 CartItems = await cartService.GetCartItems();
-                CalculateCartSummaryTotals();
                 StateHasChanged();
             }
+        }
+
+        private void OnCartUpdated(object sender, EventArgs e)
+        {
+            totalPrice = cartService.TotalPrice;
+            totalQuantity = cartService.TotalQuantity;
+            StateHasChanged();
+        }
+
+        public void Dispose()
+        {
+            cartService.CartUpdated -= OnCartUpdated;
         }
 
         private async Task RemoveItem(int productId)
         {
             await cartService.RemoveCartItem(productId);
             CartItems = await cartService.GetCartItems();
-            CalculateCartSummaryTotals();
             StateHasChanged();
         }
 
@@ -40,7 +59,6 @@ namespace MovieSolution.Pages
         {
             await cartService.DecreaseQuantity(item.ProductId);
             CartItems = await cartService.GetCartItems();
-            CalculateCartSummaryTotals();
             StateHasChanged();
         }
 
@@ -48,14 +66,7 @@ namespace MovieSolution.Pages
         {
             await cartService.IncreaseQuantity(item.ProductId);
             CartItems = await cartService.GetCartItems();
-            CalculateCartSummaryTotals();
             StateHasChanged();
-        }
-
-        private void CalculateCartSummaryTotals()
-        {
-            TotalPrice = CartItems.Sum(p => p.Quantity * p.Price).ToString("C");
-            TotalQuantity = CartItems.Sum(p => p.Quantity).ToString();
         }
     }
 }
