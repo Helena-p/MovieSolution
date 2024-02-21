@@ -14,7 +14,7 @@
 }
 else
 {
-    <div class="container">
+    <div class="container mb-lg-5">
         <h2 class="pt-5">Newly added</h2>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
         @foreach(var product in Products.OrderByDescending(p => p.ReleaseYear).Take(4))

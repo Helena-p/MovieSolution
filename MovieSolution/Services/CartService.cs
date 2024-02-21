@@ -8,10 +8,10 @@ namespace MovieSolution.Services
     public class CartService : ICartService
     {
         protected ProtectedSessionStorage ProtectedSessionStore { get; set; }
-        public List<CartItemModel> cartItems { get; set; } = new List<CartItemModel>();
+        public List<CartItemModel> CartItems { get; set; } = new List<CartItemModel>();
         public string TotalPrice { get; set; } = string.Empty;
         public string TotalQuantity { get; set; } = string.Empty;
-        private string _key = "Cart";
+        private readonly string _key = "Cart";
         public event EventHandler CartUpdated;
 
         public CartService(ProtectedSessionStorage protectedSessionStorage)
@@ -36,12 +36,12 @@ namespace MovieSolution.Services
                 var result = await ProtectedSessionStore.GetAsync<string>(_key);
                 if (!result.Success)
                 {
-                    return default(List<CartItemModel>);
+                    return default;
                 }
 
-                cartItems = JsonSerializer.Deserialize<List<CartItemModel>>(result.Value);
-                CalculateCartSummaryTotals(cartItems);
-                return cartItems;
+                CartItems = JsonSerializer.Deserialize<List<CartItemModel>>(result.Value);
+                CalculateCartSummaryTotals(CartItems);
+                return CartItems;
             }
             catch (Exception ex)
             {

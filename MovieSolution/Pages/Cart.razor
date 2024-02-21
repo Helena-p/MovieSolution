@@ -6,7 +6,7 @@
 <div class="row mb-5">
     <div class="row">
         <div class="col-md-8">
-            @if (CartItems.Count() > 0)
+            @if (CartItems != null && CartItems.Count > 0)
             {
                 @foreach (var item in CartItems)
                 {
@@ -51,7 +51,7 @@
         <div class="col-md-3">
             <h5>Cart Summary</h5>
             <div class="mt-2">
-                <div>Total - (@totalQuantity items)&nbsp;<b>@totalPrice</b></div>
+                <div>Total - (@TotalQuantity items)&nbsp;<b>@TotalPrice</b></div>
                 <AuthorizeView>
                     <Authorized>
                         <a href="checkout" class="btn btn-success mt-4">

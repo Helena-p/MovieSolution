@@ -56,12 +56,8 @@ namespace MovieSolution.Services
         {
             try
             {
-                var product = await _movieShopOnlineDbContext.Products.FindAsync(id);
-                if (product == null)
-                {
-                    throw new InvalidOperationException($"No product with id:{id} was found");
-                }
-
+                var product = await _movieShopOnlineDbContext.Products.FindAsync(id) 
+                    ?? throw new InvalidOperationException($"No product with id:{id} was found");
                 var model = product.Convert(_movieShopOnlineDbContext);
                 return await model;
             }
