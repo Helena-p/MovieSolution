@@ -1,8 +1,4 @@
 ﻿@page "/checkout"
-@using System.Security.Claims;
-@inject ICartService CartService
-@inject ProtectedSessionStorage ProtectedSessionStore
-@inject IHttpContextAccessor HttpContextAccessor
 
 <PageTitle>Checkout</PageTitle>
 
@@ -97,7 +93,7 @@
                 <p>@CartService.TotalQuantity items in cart</p>
                 <h5>Total - @CartService.TotalPrice</h5>
                 <p>Payment method: <b>Invoice</b></p><br />
-                <button type="submit" class="btn btn-success mt-4" disabled >
+                <button type="submit" class="btn btn-success mt-4" @onclick="CreateOrder">
                     <span class="oi oi-credit-card"></span>&nbsp;Place Order
                 </button>
             </div>
@@ -105,48 +101,3 @@
     </div>
 </div>
 
-
-@code {
-    
-    public AddressModel BillingAddress { get; set; } = new AddressModel();
-    public AddressModel ShippingAddress { get; set; } = new AddressModel();
-    public bool UseBillingAsShipping { get; set; } = true;
-    private string UserId {get; set;}
-
-    protected override Task OnInitializedAsync()
-    {
-        UserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return base.OnInitializedAsync();
-    }
-
-    private async Task SubmitBillingAddress()
-    {
-        // Submit billing address data
-    }
-
-    private async Task SubmitShippingAddress()
-    {
-        // Submit shipping address data
-    }
-
-    private async Task SubmitForm()
-    {
-        if (!UseBillingAsShipping)
-        {
-            // Submit both billing and shipping addresses
-            await SubmitBillingAddress();
-            await SubmitShippingAddress();
-        }
-        else
-        {
-            // Submit only billing address
-            await SubmitBillingAddress();
-        }
-        
-    }
-
-    private void HandleInvalidSubmit()
-    {
-        // Handle invalid submission for both forms
-    }
-}

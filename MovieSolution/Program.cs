@@ -40,6 +40,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();

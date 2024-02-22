@@ -26,21 +26,33 @@ namespace MovieSolution.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            ReturnUrl = Url.Content("~/");
-            if(ModelState.IsValid)
+            try
             {
-                // log in per session only
-                var result = await _signInManager.PasswordSignInAsync(
-                    Input.Email, 
-                    Input.Password, 
-                    false, lockoutOnFailure: false
-                    );
-                if (result.Succeeded)
+                ReturnUrl = Url.Content("~/");
+                if (ModelState.IsValid)
                 {
-                    return LocalRedirect(ReturnUrl);
+                    // log in per session only
+                    var result = await _signInManager.PasswordSignInAsync(
+                        Input.Email,
+                        Input.Password,
+                        false, lockoutOnFailure: false
+                        );
+                    if (result.Succeeded)
+                    {
+                        return LocalRedirect(ReturnUrl);
+                    }
                 }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User account does not exist.");
+                }              
             }
 
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
+                return Page();
+            }
             return Page();
         }
 

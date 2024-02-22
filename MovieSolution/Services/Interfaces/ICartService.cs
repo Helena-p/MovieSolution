@@ -13,5 +13,6 @@ namespace MovieSolution.Services.Interfaces
         Task RemoveCartItem(int productId);
         Task IncreaseQuantity(int productId);
         Task DecreaseQuantity(int productId);
+        Task<bool> ClearSessionStorage();
     }
 }

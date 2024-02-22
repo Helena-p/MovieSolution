@@ -11,10 +11,6 @@ namespace MovieSolution.Pages
         [Inject]
         public ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
-        public ProductDetails()
-        {
-        }
-
         [Parameter]
         public int ProductId { get; set; }
         [Inject]
@@ -23,6 +19,7 @@ namespace MovieSolution.Pages
         public NavigationManager navigationManager { get; set; }
         public ProductModel Product { get; set; } = new ProductModel();
         public List<CartItemModel> CartItems { get; set; } = new List<CartItemModel>();
+        private string _key = "Cart";
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -40,19 +37,19 @@ namespace MovieSolution.Pages
         private async Task SaveToStorage()
         {
             var json = JsonSerializer.Serialize(CartItems);
-            await ProtectedSessionStore.SetAsync("Cart", json);
+            await ProtectedSessionStore.SetAsync(_key, json);
         }
 
         private async void AddToCart(CartItemModel cartItem)
         {
             CartItems.Add(cartItem);
             await SaveToStorage();
-            navigationManager.NavigateTo("cart");
+            navigationManager.NavigateTo(_key);
         }
 
         private async Task FetchCartData()
         {
-            var result = await ProtectedSessionStore.GetAsync<string>("Cart");
+            var result = await ProtectedSessionStore.GetAsync<string>(_key);
             if (!string.IsNullOrEmpty(result.Value))
             {
                 CartItems = JsonSerializer.Deserialize<List<CartItemModel>>(result.Value);

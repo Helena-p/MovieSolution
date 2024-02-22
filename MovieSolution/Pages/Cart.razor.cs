@@ -11,10 +11,6 @@ namespace MovieSolution.Pages
         [Inject]
         public ICartService CartService { get; set; }
 
-        public Cart()
-        {
-        }
-
         public List<CartItemModel> CartItems { get; set; }
         private string TotalPrice { get; set; } = string.Empty;
         private string TotalQuantity { get; set; } = string.Empty;

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.JSInterop;
 using MovieSolution.Models;
 using MovieSolution.Services.Interfaces;
 using System.Text.Json;
@@ -7,6 +9,8 @@ namespace MovieSolution.Services
 {
     public class CartService : ICartService
     {
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
         protected ProtectedSessionStorage ProtectedSessionStore { get; set; }
         public List<CartItemModel> CartItems { get; set; } = new List<CartItemModel>();
         public string TotalPrice { get; set; } = string.Empty;
@@ -18,6 +22,7 @@ namespace MovieSolution.Services
         {
             ProtectedSessionStore = protectedSessionStorage;
         }
+
         public async Task DecreaseQuantity(int productId)
         {
             var items = await GetCartItems();
@@ -93,6 +98,22 @@ namespace MovieSolution.Services
             TotalQuantity = items.Sum(p => p.Quantity).ToString();
             // Notify subscribers whenever the cart changes
             CartUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
+        public async Task<bool> ClearSessionStorage()
+        {
+            try
+            {
+                await ProtectedSessionStore.DeleteAsync(_key);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message );
+                return false;
+            }
+           
+       
         }
 
     }

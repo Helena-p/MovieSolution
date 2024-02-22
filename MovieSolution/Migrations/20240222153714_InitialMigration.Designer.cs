@@ -12,8 +12,8 @@ using MovieSolution.Data;
 namespace MovieSolution.Migrations
 {
     [DbContext(typeof(MovieShopOnlineDbContext))]
-    [Migration("20240222111003_OrderRelatedTablesAdded")]
-    partial class OrderRelatedTablesAdded
+    [Migration("20240222153714_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -264,11 +264,9 @@ namespace MovieSolution.Migrations
 
             modelBuilder.Entity("MovieSolution.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("OrderCreatedAt")
                         .HasColumnType("datetime2");
@@ -290,8 +288,8 @@ namespace MovieSolution.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
