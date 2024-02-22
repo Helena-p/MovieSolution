@@ -1,6 +1,8 @@
 :root {
     --background-primary: rgb(28,27,31);
     --sidebar-primary: rgb(42,39,48);
+    --danger: #dc3545;
+    --danger-border: #842029;
 }
 
 html, body {
@@ -50,3 +52,15 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+input.invalid {
+    border: 1px dotted var(--danger-border);
+}
+.invalid ~ .validation-message {
+    color: var(--danger);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}

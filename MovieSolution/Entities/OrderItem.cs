@@ -1,14 +1,12 @@
-﻿using System.IO.Pipelines;
-
-namespace MovieSolution.Models
+﻿namespace MovieSolution.Entities
 {
-    public class OrderItemModel
+    public class OrderItem
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        
+
     }
 }

@@ -1,10 +1,8 @@
 ﻿@page "/checkout"
-
+@using System.Security.Claims;
 @inject ICartService CartService
 @inject ProtectedSessionStorage ProtectedSessionStore
-
-<PageTitle>Checkout</PageTitle>
-
+@inject IHttpContextAccessor HttpContextAccessor
 
 <PageTitle>Checkout</PageTitle>
 
@@ -13,25 +11,142 @@
 <div class="row mb-5">
     <div class="row">
         <div class="col-md-8">
-            <h4>My Order</h4>
-            <form>
-                <label class="form-check-label">
-                    Payment method Invoice:&nbsp;
-                    <input type="checkbox" checked="true" class="form-check-input" />
+            <h4>Billing address</h4>
+            <EditForm 
+                Model="@BillingAddress"
+                OnValidSubmit="SubmitForm"
+                OnInvalidSubmit="HandleInvalidSubmit">
+                <div class="row g-2">
+                    <DataAnnotationsValidator />
+                    <div class="col-12">
+                        <label for="FirstName" class="form-label">First name:</label>
+                            <InputText id="FirstName" @bind-Value="@BillingAddress.FirstName" class="form-control" />
+                            <ValidationMessage For="() => BillingAddress.FirstName" />
+                        </div>
+                    <div class="col-12">
+                        <label for="LastName" class="form-label">Last name:</label>
+                            <InputText id="LastName" @bind-Value="@BillingAddress.LastName" class="form-control" />
+                            <ValidationMessage For="() => BillingAddress.LastName" />
+                    </div>
+                    <div class="col-12">
+                        <label for="AddressLine" class="form-label">Street address:</label>
+                            <InputText id="AddressLine" @bind-Value="@BillingAddress.AddressLine" class="form-control" />
+                        <ValidationMessage For="() => BillingAddress.AddressLine" />
+                    </div>
+                    <div class="col-6">
+                        <label for="City" class="form-label">City:</label>
+                        <InputText id="City" @bind-Value="@BillingAddress.City" class="form-control" />
+                        <ValidationMessage For="() => BillingAddress.City" />
+                    </div>
+                    <div class="col-6">
+                        <label for="PostalCode" class="form-label">Postal code:</label>
+                        <InputText id="PostalCode" @bind-Value="@BillingAddress.PostalCode" class="form-control" />
+                        <ValidationMessage For="() => BillingAddress.PostalCode" />
+                    </div>
+                </div>
+            </EditForm>
+
+            <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" @bind="@UseBillingAsShipping" />
+                <label class="form-check-label" for="useBillingAsShipping">
+                    Use billing address as shipping address
                 </label>
-            </form>
+            </div>
+            <!-- TODO add animation for smooth transition -->
+            @if(!UseBillingAsShipping)
+            {
+                <h4 class="mt-5">Shipping address</h4>
+                <EditForm 
+                    Model="@ShippingAddress"
+                    OnValidSubmit="SubmitForm"
+                    OnInvalidSubmit="HandleInvalidSubmit">
+                    <div class="row g-2">
+                        <DataAnnotationsValidator />
+                        <div class="col-12">
+                            <label for="FirstName" class="form-label">First name:</label>
+                            <InputText id="FirstName" @bind-Value="@ShippingAddress.FirstName" class="form-control" />
+                            <ValidationMessage For="() => ShippingAddress.FirstName" />
+                        </div>
+                        <div class="col-12">
+                            <label for="LastName" class="form-label">Last name:</label>
+                            <InputText id="LastName" @bind-Value="@ShippingAddress.LastName" class="form-control" />
+                            <ValidationMessage For="() => ShippingAddress.LastName" />
+                        </div>
+                        <div class="col-12">
+                            <label for="AddressLine" class="form-label">Street address:</label>
+                            <InputText id="AddressLine" @bind-Value="@ShippingAddress.AddressLine" class="form-control" />
+                            <ValidationMessage For="() => ShippingAddress.AddressLine" />
+                        </div>
+                        <div class="col-6">
+                            <label for="City" class="form-label">City:</label>
+                            <InputText id="City" @bind-Value="@ShippingAddress.City" class="form-control" />
+                            <ValidationMessage For="() => ShippingAddress.City" />
+                        </div>
+                        <div class="col-6">
+                            <label for="PostalCode" class="form-label">Postal code:</label>
+                            <InputText id="PostalCode" @bind-Value="@ShippingAddress.PostalCode" class="form-control" />
+                            <ValidationMessage For="() => ShippingAddress.PostalCode" />
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            
         </div>
         <div class="col-md-3">
             <div class="mt-2">
-                <div>Total - </div>
-                <a href="" class="btn btn-success mt-4">
+                <p>@CartService.TotalQuantity items in cart</p>
+                <h5>Total - @CartService.TotalPrice</h5>
+                <p>Payment method: <b>Invoice</b></p><br />
+                <button type="submit" class="btn btn-success mt-4" disabled >
                     <span class="oi oi-credit-card"></span>&nbsp;Place Order
-                </a>
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-@code {
 
+@code {
+    
+    public AddressModel BillingAddress { get; set; } = new AddressModel();
+    public AddressModel ShippingAddress { get; set; } = new AddressModel();
+    public bool UseBillingAsShipping { get; set; } = true;
+    private string UserId {get; set;}
+
+    protected override Task OnInitializedAsync()
+    {
+        UserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return base.OnInitializedAsync();
+    }
+
+    private async Task SubmitBillingAddress()
+    {
+        // Submit billing address data
+    }
+
+    private async Task SubmitShippingAddress()
+    {
+        // Submit shipping address data
+    }
+
+    private async Task SubmitForm()
+    {
+        if (!UseBillingAsShipping)
+        {
+            // Submit both billing and shipping addresses
+            await SubmitBillingAddress();
+            await SubmitShippingAddress();
+        }
+        else
+        {
+            // Submit only billing address
+            await SubmitBillingAddress();
+        }
+        
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        // Handle invalid submission for both forms
+    }
 }
