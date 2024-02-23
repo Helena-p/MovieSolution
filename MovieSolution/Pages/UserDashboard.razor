@@ -5,6 +5,7 @@
 <h1 class="my-5">Dashboard</h1>
 @if(Orders.Count > 0)
 {
+    <h3 class="mb-4">@Orders.Count orders</h3>
     @foreach (var order in Orders)
     {
         <p>Total: @order.OrderTotal.ToString("C")</p>
@@ -38,6 +39,12 @@ else
 {
     <p>No orders were found!</p>
 }
+
+<style>
+    table {
+        max-width: 46.875rem;
+    }
+</style>
 
 @code {
     [Inject]
