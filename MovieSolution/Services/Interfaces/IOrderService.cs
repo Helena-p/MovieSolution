@@ -8,5 +8,6 @@ namespace MovieSolution.Services.Interfaces
         Task<Order> AddOrder(OrderModel item);
         Task<OrderItem> AddOrderItem(OrderItemModel item, Guid id);
         Task<Address> AddAddress(AddressModel item);
+        Task<List<OrderModel>> GetOrdersByUserId(string userId);
     }
 }

@@ -60,5 +60,30 @@ namespace MovieSolution.Services
                 return result.Entity;
           
         }
+
+        public async Task<List<OrderModel>> GetOrdersByUserId(string userId)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(userId))
+                {
+                    throw new ArgumentNullException(nameof(userId));
+                }
+
+                IQueryable<Order> userOrders = _movieShopOnlineDbContext.Orders.Where(order => order.UserId == userId);
+                if (userOrders == null)
+                {
+                    return default(List<OrderModel>);
+                }
+                List<OrderModel> orders = await _movieShopOnlineDbContext.Orders.Convert(_movieShopOnlineDbContext);
+                return orders;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

@@ -107,8 +107,6 @@ namespace MovieSolution.Pages
             {
                 await OrderService.AddOrderItem(orderItem, id);
             }
-        }
-
-       
+        }    
     }
 }

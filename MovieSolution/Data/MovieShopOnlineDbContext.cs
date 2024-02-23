@@ -18,6 +18,10 @@ namespace MovieSolution.Data
             
         }
 
+        public MovieShopOnlineDbContext()
+        {
+        }
+
         // Seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,0 +1,57 @@
+﻿@page "/dashboard"
+@inject IOrderService OrderService
+
+<h1 class="my-5">Dashboard</h1>
+@if(Orders.Count > 0)
+{
+    @foreach (var order in Orders)
+    {
+        <p>Total cost: @order.OrderTotal.ToString("C")</p>
+        <p>Order created at: @order.OrderCreatedAt.ToShortDateString()</p>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price / Unit</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                    @foreach (var item in order.OrderItems)
+                    {
+                    <tr>
+                        <th scope="row">Product id @item.ProductId</th>
+                        <td>@item.Quantity pcs</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@((item.Quantity * item.Price).ToString("C"))</td>
+                    </tr>
+                    }
+            </tbody>
+            
+        </table>
+    }
+}
+else
+{
+    <p>No orders were found!</p>
+}
+
+@code {
+    [Inject]
+    public IHttpContextAccessor HttpContextAccessor { get; set; }
+    protected string UserId { get; set; } = string.Empty;
+    protected List<OrderModel> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserId = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        await GetUserOrders();
+    }
+
+    private async Task GetUserOrders()
+    {
+        Orders = await OrderService.GetOrdersByUserId(UserId);
+    }
+
+}

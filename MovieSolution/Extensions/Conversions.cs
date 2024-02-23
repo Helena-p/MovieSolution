@@ -2,6 +2,7 @@
 using MovieSolution.Data;
 using MovieSolution.Entities;
 using MovieSolution.Models;
+using MovieSolution.Pages;
 
 namespace MovieSolution.Extensions
 {   
@@ -78,8 +79,33 @@ namespace MovieSolution.Extensions
             {
                 Id = order.Id,
                 UserId = order.UserId,
-                OrderCreatedAt = order.OrderCreatedAt
+                OrderCreatedAt = order.OrderCreatedAt,
+                OrderTotal = order.OrderTotal,
             };
+        }
+
+        public static async Task<List<OrderModel>> Convert(this IQueryable<Order> orders, MovieShopOnlineDbContext context)
+        {
+            return await(from order in orders
+                         join orderItem in context.OrderItems
+                         on order.Id equals orderItem.OrderId
+                         select new OrderModel
+                         {
+                             Id = order.Id,
+                             UserId = order.UserId,
+                             OrderCreatedAt = order.OrderCreatedAt,
+                             OrderTotal = order.OrderTotal,
+                             OrderItems = context.OrderItems
+                                       .Where(item => item.OrderId == order.Id)
+                                       .Select(item => new OrderItemModel
+                                       {
+                                           Id = item.Id,
+                                           OrderId = order.Id,
+                                           ProductId = item.ProductId,
+                                           Price = item.Price,
+                                           Quantity = item.Quantity,
+                                       }).ToList(),
+                         }).ToListAsync();
         }
     }
 }
