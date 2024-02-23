@@ -3,6 +3,7 @@ using MovieSolution.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using MovieSolution.Services.Interfaces;
+using MovieSolution.Entities;
 
 namespace MovieSolution.Pages
 {
@@ -11,9 +12,13 @@ namespace MovieSolution.Pages
         [Inject]
         public ICartService CartService { get; set; }
         [Inject]
+        public IOrderService OrderService { get; set; }
+        [Inject]
         public ProtectedSessionStorage ProtectedSessionStore { get; set; }
         [Inject]
         public IHttpContextAccessor HttpContextAccessor { get; set; }
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
         public AddressModel BillingAddress { get; set; } = new();
         public AddressModel ShippingAddress { get; set; } = new();
@@ -37,32 +42,11 @@ namespace MovieSolution.Pages
             }
         }
 
-        private async Task SaveBillingAddress()
+        private async Task SaveAddress(AddressModel address, AddressType addressType)
         {
-            BillingAddress = new AddressModel
-            {
-                FirstName = BillingAddress.FirstName,
-                LastName = BillingAddress.LastName,
-                AddressLine = BillingAddress.AddressLine,
-                City = BillingAddress.City,
-                PostalCode = BillingAddress.PostalCode,
-                AddressType = AddressType.Billing,
-                UserId = UserId,
-            };
-        }
-
-        private async Task SaveShippingAddress()
-        {
-            ShippingAddress = new AddressModel
-            {
-                FirstName = ShippingAddress.FirstName,
-                LastName = ShippingAddress.LastName,
-                AddressLine = ShippingAddress.AddressLine,
-                City = ShippingAddress.City,
-                PostalCode = ShippingAddress.PostalCode,
-                AddressType = AddressType.Shipping,
-                UserId = UserId,
-            };
+            address.UserId = UserId;
+            address.AddressType = addressType;
+            await OrderService.AddAddress(address);
         }
 
         private async Task SubmitForm()
@@ -70,17 +54,16 @@ namespace MovieSolution.Pages
             if (!UseBillingAsShipping)
             {
                 // Submit both billing and shipping addresses
-                await SaveBillingAddress();
-                await SaveShippingAddress();
-                
+                await SaveAddress(BillingAddress, AddressType.Billing);
+                await SaveAddress(ShippingAddress, AddressType.Shipping);
+
             }
             else
             {
                 // Submit only billing address
-                await SaveBillingAddress();
-               
-            }
+                await SaveAddress(BillingAddress, AddressType.Billing);
 
+            }
         }
 
         private void HandleInvalidSubmit()
@@ -88,7 +71,7 @@ namespace MovieSolution.Pages
             // Handle invalid submission for both forms
         }
 
-        public async Task CreateOrder()
+        public async Task PlaceOrder()
         {
             Order = new OrderModel
             {
@@ -104,7 +87,28 @@ namespace MovieSolution.Pages
                     Price = i.Price
                 }).ToList()
             };
-            await CartService.ClearSessionStorage();
+
+            await SubmitForm();
+
+            await CreateOrder();
         }
+        public async Task CreateOrder()
+        {
+            await OrderService.AddOrder(Order);
+            await SaveOrderItems(Order.OrderItems, Order.Id);
+
+            await CartService.ClearSessionStorage();
+            NavigationManager.NavigateTo("orderconfirm");
+        }
+
+        private async Task SaveOrderItems(List<OrderItemModel> orderItems, Guid id)
+        {
+            foreach (var orderItem in orderItems)
+            {
+                await OrderService.AddOrderItem(orderItem, id);
+            }
+        }
+
+       
     }
 }

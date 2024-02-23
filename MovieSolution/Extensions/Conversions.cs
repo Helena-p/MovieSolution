@@ -57,5 +57,29 @@ namespace MovieSolution.Extensions
                 CategoryId = product.CategoryId,
             };
         }
+
+        public static Address Convert(this AddressModel address)
+        {
+            return new Address
+            {
+                FirstName = address.FirstName,
+                LastName = address.LastName,
+                AddressLine = address.AddressLine,
+                City = address.City,
+                PostalCode = address.PostalCode,
+                AddressType = address.AddressType,
+                UserId = address.UserId,
+            };
+        }
+
+        public static Order Convert(this OrderModel order)
+        {
+            return new Order
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                OrderCreatedAt = order.OrderCreatedAt
+            };
+        }
     }
 }

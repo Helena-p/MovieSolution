@@ -41,10 +41,6 @@ namespace MovieSolution.Areas.Identity.Pages.Account
                 var claim = new Claim("Role", Input.Role.ToLower());
                 var claimResult = await _userManager.AddClaimAsync(identity, claim);
 
-               // var role = new IdentityRole(Input.Role); // create instance
-               // var addRoleResult = await _roleManager.CreateAsync(role); // save to DB
-                //var addUserRoleResult = await _userManager.AddToRoleAsync(identity, Input.Role); // add role to user
-
                 // SignIn user if success/valid
                 if(result.Succeeded && claimResult.Succeeded)
                 {
@@ -52,7 +48,11 @@ namespace MovieSolution.Areas.Identity.Pages.Account
                     await _signInManager.SignInAsync(identity, isPersistent: false);
                     return LocalRedirect(ReturnUrl);
                 }
-            };
+            }
+            else
+                {
+                    ModelState.AddModelError(string.Empty, "Email or password is incorrect");
+                }
 
             return Page();
         }
