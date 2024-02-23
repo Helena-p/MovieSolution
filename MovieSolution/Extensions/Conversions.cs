@@ -102,6 +102,7 @@ namespace MovieSolution.Extensions
                                            Id = item.Id,
                                            OrderId = order.Id,
                                            ProductId = item.ProductId,
+                                           ProductName = context.Products.SingleOrDefault(n => n.Id == item.ProductId).Title,
                                            Price = item.Price,
                                            Quantity = item.Quantity,
                                        }).ToList(),

@@ -1,14 +1,16 @@
 ﻿@page "/dashboard"
 @inject IOrderService OrderService
+@inject IProductService ProductService
 
 <h1 class="my-5">Dashboard</h1>
 @if(Orders.Count > 0)
 {
     @foreach (var order in Orders)
     {
-        <p>Total cost: @order.OrderTotal.ToString("C")</p>
+        <p>Total: @order.OrderTotal.ToString("C")</p>
         <p>Order created at: @order.OrderCreatedAt.ToShortDateString()</p>
-        <table class="table table-dark table-striped">
+        <small>@order.Id</small>
+        <table class="table table-dark table-striped mb-5">
             <thead>
                 <tr>
                     <th scope="col">Product</th>
@@ -20,15 +22,15 @@
             <tbody>
                     @foreach (var item in order.OrderItems)
                     {
+                    
                     <tr>
-                        <th scope="row">Product id @item.ProductId</th>
+                        <th scope="row">@item.ProductName</th>
                         <td>@item.Quantity pcs</td>
                         <td>@item.Price.ToString("C")</td>
                         <td>@((item.Quantity * item.Price).ToString("C"))</td>
                     </tr>
                     }
-            </tbody>
-            
+            </tbody>           
         </table>
     }
 }

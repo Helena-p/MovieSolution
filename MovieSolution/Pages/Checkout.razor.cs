@@ -83,6 +83,7 @@ namespace MovieSolution.Pages
                 {
                     OrderId = Order.Id,
                     ProductId = i.ProductId,
+                    ProductName = i.ProductName,
                     Quantity = i.Quantity,
                     Price = i.Price
                 }).ToList()
