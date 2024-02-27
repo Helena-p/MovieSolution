@@ -1,6 +1,56 @@
-﻿<h3>Admin</h3>
-<h1>Administrators page</h1>
+﻿@page "/admin"
+<PageTitle>Admin</PageTitle>
+<div class="row">
+        <div class="col-md-8">
+            <h1 class="my-5">Manage Products</h1>
+            <EditForm Model="@Movie" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+                <div class="row g-2">
+                    <DataAnnotationsValidator />
+                <div class="col-12">
+                    <label for="Title" class="form-label">Title:</label>
+                    <InputText id="Title" @bind-Value="@Movie.Title" class="form-control" />
+                    <ValidationMessage For="() => Movie.Title" />
+                </div>
+                <div class="col-12">
+                    <label for="Director" class="form-label">Director:</label>
+                    <InputText id="Director" @bind-Value="@Movie.Director" class="form-control" />
+                    <ValidationMessage For="() => Movie.Director" />
+                </div>
+                <div class="col-12">
+                    <label for="ImageURL" class="form-label">ImageURL:</label>
+                    <InputText id="ImageURL" @bind-Value="@Movie.ImageURL" class="form-control" />
+                    <ValidationMessage For="() => Movie.ImageURL" />
+                </div>
+                <div class="col-4">
+                    <label for="ReleaseYear" class="form-label">ReleaseYear:</label>
+                    <InputNumber id="ReleaseYear" @bind-Value="@Movie.ReleaseYear" class="form-control" />
+                    <ValidationMessage For="() => Movie.ReleaseYear" />
+                </div>
+                <div class="col-4">
+                    <label for="Price" class="form-label">Price:</label>
+                    <InputNumber id="Price" @bind-Value="@Movie.Price" class="form-control" />
+                    <ValidationMessage For="() => Movie.Price" />
+                </div>
+                @if(Categories != null)
+                {
+                    <div class="col-4">
+                        <label for="CategoryId" class="form-label">Select category:</label>
+                        <InputSelect id="CategoryId" @bind-Value="@Movie.CategoryId" class="form-control">
+                            @foreach (var category in Categories)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => Movie.CategoryId" />
+                    </div>
+                }              
+                <div class="col-12">
+                    <label for="Description" class="form-label">Description:</label>
+                    <InputTextArea id="Description" @bind-Value="@Movie.Description" class="form-control" />
+                    <ValidationMessage For="() => Movie.Description" />
+                </div>
+                </div>
+            </EditForm>
+        </div>
+</div>
 
-@code {
-
-}

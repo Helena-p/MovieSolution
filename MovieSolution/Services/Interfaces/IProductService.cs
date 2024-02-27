@@ -9,5 +9,6 @@ namespace MovieSolution.Services.Interfaces
         Task<ProductModel> GetItemById(int id);
         Task<Product> AddItem(ProductModel item);
         Task DeleteItem(int id);
+        Task<List<ProductCategory>> GetProductCategories();
     }
 }

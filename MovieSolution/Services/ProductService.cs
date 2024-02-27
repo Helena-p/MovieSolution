@@ -3,6 +3,7 @@ using MovieSolution.Entities;
 using MovieSolution.Models;
 using MovieSolution.Services.Interfaces;
 using MovieSolution.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieSolution.Services
 {
@@ -80,6 +81,16 @@ namespace MovieSolution.Services
 
                 throw;
             }
+        }
+
+        public async Task<List<ProductCategory>>? GetProductCategories()
+        {
+           List<ProductCategory> categories = await _movieShopOnlineDbContext.ProductCategories.ToListAsync();
+            if(categories != null)
+            {
+                return categories;
+            }
+            return null;
         }
     }
 }
