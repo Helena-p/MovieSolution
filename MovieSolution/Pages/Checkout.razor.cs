@@ -99,7 +99,7 @@ namespace MovieSolution.Pages
             await SaveOrderItems(Order.OrderItems, Order.Id);
 
             await CartService.ClearSessionStorage();
-            NavigationManager.NavigateTo("orderconfirm");
+            NavigationManager.NavigateTo("orderconfirm", forceLoad: true);
         }
 
         private async Task SaveOrderItems(List<OrderItemModel> orderItems, Guid id)
