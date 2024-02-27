@@ -59,6 +59,10 @@ input.invalid {
     color: var(--danger);
 }
 
+.alert {
+    max-width: 18.75rem;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     html {
         scroll-behavior: smooth;

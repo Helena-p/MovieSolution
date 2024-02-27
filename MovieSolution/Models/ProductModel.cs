@@ -8,17 +8,22 @@ namespace MovieSolution.Models
         [BindNever]
         public int Id { get; set; }
         [Required]
-        [MaxLength(100, ErrorMessage = "Title cannot exceed 100 characters")]
+        [StringLength(100, ErrorMessage = "{0} cannot exceed {1} characters, or be less than {2}", MinimumLength = 2)]
         public string Title { get; set; } = string.Empty;
+        [Required]
+        [StringLength(200, ErrorMessage = "{0} cannot exceed {1} characters, or be less than {2}", MinimumLength = 2)]
         public string Description { get; set; } = string.Empty;
         [Required]
-        [MaxLength(100, ErrorMessage = "Director name cannot exceed 100 characters")]
+        [StringLength(100, ErrorMessage = "{0} cannot exceed {1} characters, or be less than {2}", MinimumLength = 2)]
         public string Director { get; set; } = string.Empty;
         [Required]
+        [Url]
         public string ImageURL { get; set; } = string.Empty;
         [Required]
+        [Range(1900, 9999, ErrorMessage = "{0} must range between {1} and {2}")]
         public int ReleaseYear { get; set; }
         [Required]
+        [Range(1, 100, ErrorMessage = "{0} must range between {1} and {2}")]
         public decimal Price { get; set; }
         [Required]
         public int CategoryId { get; set; }
