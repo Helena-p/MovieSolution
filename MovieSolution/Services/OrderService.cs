@@ -75,7 +75,7 @@ namespace MovieSolution.Services
                 {
                     return default(List<OrderModel>);
                 }
-                List<OrderModel> orders = await _movieShopOnlineDbContext.Orders.Convert(_movieShopOnlineDbContext);
+                List<OrderModel> orders = await userOrders.Convert(_movieShopOnlineDbContext);
                 return orders;
 
             }
