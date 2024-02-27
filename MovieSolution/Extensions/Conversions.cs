@@ -86,27 +86,29 @@ namespace MovieSolution.Extensions
 
         public static async Task<List<OrderModel>> Convert(this IQueryable<Order> orders, MovieShopOnlineDbContext context)
         {
-            return await(from order in orders
-                         join orderItem in context.OrderItems
-                         on order.Id equals orderItem.OrderId
-                         select new OrderModel
-                         {
-                             Id = order.Id,
-                             UserId = order.UserId,
-                             OrderCreatedAt = order.OrderCreatedAt,
-                             OrderTotal = order.OrderTotal,
-                             OrderItems = context.OrderItems
-                                       .Where(item => item.OrderId == order.Id)
-                                       .Select(item => new OrderItemModel
-                                       {
-                                           Id = item.Id,
-                                           OrderId = order.Id,
-                                           ProductId = item.ProductId,
-                                           ProductName = context.Products.SingleOrDefault(n => n.Id == item.ProductId).Title,
-                                           Price = item.Price,
-                                           Quantity = item.Quantity,
-                                       }).ToList(),
-                         }).ToListAsync();
+            return await (
+                from order in orders
+                select new OrderModel
+                {
+                    Id = order.Id,
+                    UserId = order.UserId,
+                    OrderCreatedAt = order.OrderCreatedAt,
+                    OrderTotal = order.OrderTotal,
+                    OrderItems = (
+                        from orderItem in context.OrderItems
+                        where orderItem.OrderId == order.Id
+                        select new OrderItemModel
+                        {
+                            Id = orderItem.Id,
+                            OrderId = orderItem.OrderId,
+                            ProductId = orderItem.ProductId,
+                            ProductName = context.Products.SingleOrDefault(n => n.Id == orderItem.ProductId).Title,
+                            Price = orderItem.Price,
+                            Quantity = orderItem.Quantity,
+                        }
+                    ).ToList()
+                }
+            ).ToListAsync();
         }
     }
 }
