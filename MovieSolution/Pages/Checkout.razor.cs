@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using MovieSolution.Services.Interfaces;
 using MovieSolution.Entities;
+using MovieSolution.Services;
 
 namespace MovieSolution.Pages
 {
@@ -11,6 +12,7 @@ namespace MovieSolution.Pages
     {
         [Inject]
         public ICartService CartService { get; set; }
+       
         [Inject]
         public IOrderService OrderService { get; set; }
         [Inject]
@@ -43,10 +45,18 @@ namespace MovieSolution.Pages
         }
 
         private async Task SaveAddress(AddressModel address, AddressType addressType)
-        {
+        {          
             address.UserId = UserId;
             address.AddressType = addressType;
-            await OrderService.AddAddress(address);
+            var result = await OrderService.AddAddress(address);
+            if(result == null)
+            {
+                Console.WriteLine("Address already exist");
+            }
+            else
+            {
+                Console.WriteLine("Address added successfully");
+            }
         }
 
         private async Task SubmitForm()

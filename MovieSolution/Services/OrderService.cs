@@ -3,17 +3,22 @@ using MovieSolution.Entities;
 using MovieSolution.Extensions;
 using MovieSolution.Models;
 using MovieSolution.Services.Interfaces;
+using System.Net;
 
 namespace MovieSolution.Services
 {
     public class OrderService : IOrderService
     {
         private readonly MovieShopOnlineDbContext _movieShopOnlineDbContext;
+        private readonly IUserService _userService;
+
+        private List<AddressModel> UserAddressList { get; set; } = new();
 
 
-        public OrderService(MovieShopOnlineDbContext movieShopOnlineDbContext)
+        public OrderService(MovieShopOnlineDbContext movieShopOnlineDbContext, IUserService userService)
         {
             _movieShopOnlineDbContext = movieShopOnlineDbContext;
+            _userService = userService;
         }
         public async Task<Address> AddAddress(AddressModel item)
         {           
@@ -22,10 +27,21 @@ namespace MovieSolution.Services
                 throw new ArgumentNullException(nameof(item));
             }
 
+            UserAddressList = await _userService.GetUserAddresses(item.UserId);
+            if (UserAddressList.Any(address =>
+               address.UserId == item.UserId &&
+               address.AddressType == item.AddressType &&
+               address.AddressLine == item.AddressLine &&
+               address.City == item.City &&
+               address.PostalCode == item.PostalCode))
+            {
+                // Address already exists, do nothing
+                return null;
+            }
             var addressToAdd = item.Convert();
             var result = await _movieShopOnlineDbContext.Addresses.AddAsync(addressToAdd);
             await _movieShopOnlineDbContext.SaveChangesAsync();
-            return result.Entity;         
+            return result.Entity;
         }
 
         public async Task<Order> AddOrder(OrderModel item)
