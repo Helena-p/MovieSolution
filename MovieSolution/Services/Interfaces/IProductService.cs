@@ -10,5 +10,6 @@ namespace MovieSolution.Services.Interfaces
         Task<Product> AddItem(ProductModel item);
         Task DeleteItem(int id);
         Task<List<ProductCategory>> GetProductCategories();
+        Task<List<OrderItem>> GetMostPopularOrderItems();
     }
 }

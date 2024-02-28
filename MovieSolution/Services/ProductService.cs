@@ -59,8 +59,8 @@ namespace MovieSolution.Services
             {
                 var product = await _movieShopOnlineDbContext.Products.FindAsync(id) 
                     ?? throw new InvalidOperationException($"No product with id:{id} was found");
-                var model = product.Convert(_movieShopOnlineDbContext);
-                return await model;
+                var productModel = product.Convert(_movieShopOnlineDbContext);
+                return await productModel;
             }
             catch (Exception ex)
             {
@@ -91,6 +91,34 @@ namespace MovieSolution.Services
                 return categories;
             }
             return null;
+        }
+
+        public async Task<List<OrderItem>> GetMostPopularOrderItems()
+        {
+            /*
+             * Sum qty for individual products
+             * Create a group-list of the four items with highest totalqty
+             */
+            var itemsByQuantity = await _movieShopOnlineDbContext.OrderItems
+                .GroupBy(item => item.ProductId)
+                .Select(group => new { ProductId = group.Key, TotalQuantity = group.Sum(entity => entity.Quantity) })
+                .OrderByDescending(e1 => e1.TotalQuantity)
+                .Take(4)
+                .ToListAsync();
+
+            // Retrieve the OrderItem objects based on the group-list from DB
+                var orderItems = new List<OrderItem>();
+                foreach (var item in itemsByQuantity)
+                {
+                    var orderItem = await _movieShopOnlineDbContext.OrderItems
+                        .FirstOrDefaultAsync(o => o.ProductId == item.ProductId);
+                    if (orderItem != null)
+                    {
+                        orderItems.Add(orderItem);
+                    }
+                }
+
+            return orderItems;
         }
     }
 }
