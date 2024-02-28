@@ -49,6 +49,18 @@ I learned how user interaction differs between client vs server side rendered ap
 hand when I initially didn't understand why session storage wasn't properly cleared after the user placed his/hers order and was redirected to the 
 order confirmation page. By adding <code>StateHasChanged()</code> to the calling method the page refreshed and the execution to clear session storage 
 was also visualised in the UI.
+## Future improvements/features
+### Expand admin page
+The implementation of user registering its role isn't optimal and should be avoided and only restricted to admin. In a future implementation
+I would move the ability to assign roles to the admin page.
+### Components
+In checkout there is a form for shipping and billing addresses each. I would like to create a form component to reduce this
+duplication to following the DRY principle. But, this was a little bit trickier than I initially thought due to the <code>EditForm</code>
+and how its two-way binding works. I have temporarily put this aside to a future implementation after necessary knowledge gained and research 
+have been made.
+### Syncfusion
+I tried to implement the Synfusion component library, but was limited due to Syncfusion license key only valid for seven days for a free community tier.
+When I have a valid license key I would like to implement orderdata visualisation with graphs to the user dashboard.
 ## Built with
 - EntityFramework Core
 - Blazor Server (.Net 6)
