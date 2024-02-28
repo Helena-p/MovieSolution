@@ -63,6 +63,10 @@ input.invalid {
     max-width: 18.75rem;
 }
 
+a.nav-link {
+    padding-left: 10px !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     html {
         scroll-behavior: smooth;

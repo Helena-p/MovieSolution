@@ -28,8 +28,14 @@ I therefore carry out the project on my own and develop the application using Bl
 	- Total count of orders.
 	- The url should look similar to customers/orders/{email address}.
 ### Deviation from pre-requisites
+By implementing ASP.Net Identity roles in the project I found it more suitable to place a 
+form for adding new products on the admin page instaed of the product details page. Then show details of the product 
+on the details page with the 'Add to cart' button instead of initially on the product card. This descision didn't 
+have any negative effect in adding more clicks for the user to navigate to the add-to-cart button. In a production ready
+application I would also add a CTA (Call-To-Action) on the landing page.
 ## Lessons learned
 ## Built with
 - EntityFramework Core
 - Blazor Server (.Net 6)
 - Microsoft ASPNet Core Identity
+- Bootstrap5
