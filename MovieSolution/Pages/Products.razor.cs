@@ -9,11 +9,7 @@ namespace MovieSolution.Pages
         [Inject]
         public IProductService productService { get; set; }
 
-        public Products()
-        {
-        }
-
-        private List<ProductModel>? AllProducts { get; set; }
+        private List<ProductModel> AllProducts { get; set; } = new();
 
         protected override async Task OnInitializedAsync()
         {

@@ -57,10 +57,17 @@ I would move the ability to assign roles to the admin page.
 In checkout there is a form for shipping and billing addresses each. I would like to create a form component to reduce this
 duplication to following the DRY principle. But, this was a little bit trickier than I initially thought due to the <code>EditForm</code>
 and how its two-way binding works. I have temporarily put this aside to a future implementation after necessary knowledge gained and research 
-have been made.
+have been made.<br>
+I implemented a check not to save the address to the database if the address already existed for the user. An further improvement would be to pre-populate
+the form if an address already existed for billing and/or shipping. A button for the user to clear the form would then be neccessary to add so the 
+user wouldn't be forced to manually clear the form fields before entering new address information.
 ### Syncfusion
 I tried to implement the Synfusion component library, but was limited due to Syncfusion license key only valid for seven days for a free community tier.
 When I have a valid license key I would like to implement orderdata visualisation with graphs to the user dashboard.
+### Performance
+The change cart item quantity feature would greatly benefit implementing debouncing for performance. The Blazor <code>@onclick</code>
+event is self-cleaning, this therefore reduces the work of removing event listeners to prevent memory leaks. However, when adding delegates 
+to update the cart quantity icon in the nav menu, removing event listener was neccessary since it didn't rely on the click event.
 ## Built with
 - EntityFramework Core
 - Blazor Server (.Net 6)

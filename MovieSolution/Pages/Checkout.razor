@@ -11,8 +11,7 @@
             <h4>Billing address</h4>
             <EditForm 
                 Model="@BillingAddress"
-                OnValidSubmit="SubmitForm"
-                OnInvalidSubmit="HandleInvalidSubmit">
+                OnValidSubmit="SubmitForm">
                 <div class="row g-2">
                     <DataAnnotationsValidator />               
                     <div class="col-12">
@@ -55,8 +54,8 @@
                 <h4 class="mt-5">Shipping address</h4>
                 <EditForm 
                     Model="@ShippingAddress"
-                    OnValidSubmit="SubmitForm"
-                    OnInvalidSubmit="HandleInvalidSubmit">
+                    OnValidSubmit="SubmitForm">
+                    
                     <div class="row g-2">
                         <DataAnnotationsValidator />
                         <div class="col-12">

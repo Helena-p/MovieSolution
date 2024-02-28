@@ -26,7 +26,7 @@ namespace MovieSolution.Pages
         public AddressModel ShippingAddress { get; set; } = new();
         public OrderModel Order { get; set; } = new();
         public bool UseBillingAsShipping { get; set; } = true;
-        public List<CartItemModel> CartItems { get; set; } = new List<CartItemModel>();
+        public List<CartItemModel> CartItems { get; set; } = new();
         public List<OrderItemModel> OrderItems { get; set; } = new();
         private string UserId { get; set; } = string.Empty;
 
@@ -74,11 +74,6 @@ namespace MovieSolution.Pages
                 await SaveAddress(BillingAddress, AddressType.Billing);
 
             }
-        }
-
-        private void HandleInvalidSubmit()
-        {
-            // Handle invalid submission for both forms
         }
 
         public async Task PlaceOrder()

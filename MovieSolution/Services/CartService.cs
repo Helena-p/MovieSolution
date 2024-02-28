@@ -12,7 +12,7 @@ namespace MovieSolution.Services
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
         protected ProtectedSessionStorage ProtectedSessionStore { get; set; }
-        public List<CartItemModel> CartItems { get; set; } = new List<CartItemModel>();
+        public List<CartItemModel> CartItems { get; set; } = new();
         public string TotalPrice { get; set; } = string.Empty;
         public string TotalQuantity { get; set; } = string.Empty;
         private readonly string _key = "Cart";
