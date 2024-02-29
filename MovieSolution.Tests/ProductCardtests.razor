@@ -1,0 +1,30 @@
+﻿@inherits TestContext;
+@using MovieSolution;
+@using MovieSolution.Models;
+@using MovieSolution.Shared.Components;
+
+
+@code {
+    [Fact]
+    public void ProductCard_RendersCorrectly_Test()
+    {
+        // Arrange
+        var product = new ProductModel
+            {
+                Id = 1,
+                Title = "Title",
+                Description = "A short description",
+                Director = "A name",
+                ImageURL = "https://someurl",
+                Price = 7,
+                ReleaseYear = 2000,
+                CategoryId = 1,
+                CategoryName = "Comedy"
+            };
+
+        // Act
+        var cut = RenderComponent<ProductCard>(param => param.Add(p => p.Product, product));
+        // Assert
+        Assert.Contains("Title", cut.Markup);
+    }
+}

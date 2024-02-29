@@ -3,8 +3,6 @@ using MovieSolution.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using MovieSolution.Services.Interfaces;
-using MovieSolution.Entities;
-using MovieSolution.Services;
 
 namespace MovieSolution.Pages
 {
