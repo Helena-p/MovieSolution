@@ -8,11 +8,10 @@ namespace MovieSolution.Pages
 {
     public partial class ProductDetails
     {
-        [Inject]
-        public ProtectedSessionStorage ProtectedSessionStore { get; set; }
-
         [Parameter]
         public int ProductId { get; set; }
+        [Inject]
+        public ProtectedSessionStorage ProtectedSessionStore { get; set; }
         [Inject]
         public IProductService productService { get; set; }
         [Inject]

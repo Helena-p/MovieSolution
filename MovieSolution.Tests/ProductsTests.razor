@@ -1,0 +1,49 @@
+﻿@inherits TestContext;
+@using Microsoft.Extensions.DependencyInjection
+@using Moq;
+@using MovieSolution;
+@using MovieSolution.Models;
+@using MovieSolution.Pages
+@using MovieSolution.Services
+@using MovieSolution.Services.Interfaces
+@using MovieSolution.Shared.Components;
+
+@code {
+    private ProductModel CreateProductModel()
+    {
+        return new ProductModel
+            {
+                Id = 1,
+                Title = "Title",
+                Description = "A short description",
+                Director = "A name",
+                ImageURL = "https://someurl",
+                Price = 7,
+                ReleaseYear = 2000,
+                CategoryId = 1,
+                CategoryName = "Comedy"
+            };
+    }
+
+    [Fact]
+    public void Service_Injection_AllProductsRendersCorrectly_Test()
+    {
+        // Arrange
+        var productList = new List<ProductModel>()
+        {
+            CreateProductModel()
+        };
+
+        var productServiceMock = new Mock<IProductService>();
+        productServiceMock.Setup(p => p.GetItems()).ReturnsAsync(productList);
+        Services.AddScoped<IProductService>(provider => productServiceMock.Object);
+
+        // Act
+        var cut = RenderComponent<Products>();
+        productServiceMock.Verify(p => p.GetItems(), Times.Once);
+
+        // Assert
+        Assert.NotNull(cut.Instance.AllProducts);     
+        Assert.Equal(productList, cut.Instance.AllProducts);
+    }
+}
