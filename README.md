@@ -73,3 +73,4 @@ to update the cart quantity icon in the nav menu, removing event listener was ne
 - Blazor Server (.Net 6)
 - Microsoft ASPNet Core Identity
 - Bootstrap5
+- bUnit testing framework

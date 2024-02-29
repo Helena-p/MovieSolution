@@ -5,11 +5,9 @@
 
 
 @code {
-    [Fact]
-    public void ProductCard_RendersCorrectly_Test()
+    private ProductModel CreateProductModel()
     {
-        // Arrange
-        var product = new ProductModel
+        return new ProductModel
             {
                 Id = 1,
                 Title = "Title",
@@ -21,10 +19,32 @@
                 CategoryId = 1,
                 CategoryName = "Comedy"
             };
+    }
 
+    [Fact]
+    public void ProductCard_RendersCorrectly_Test()
+    {
+        // Arrange
+        var product = CreateProductModel();
         // Act
         var cut = RenderComponent<ProductCard>(param => param.Add(p => p.Product, product));
         // Assert
         Assert.Contains("Title", cut.Markup);
+    }
+
+    [Fact]
+    public void ProductCard_HyperLinkMarkup_Test()
+    {
+        // Arrange
+        var expectedURL = "products/1";
+        var product = CreateProductModel();
+
+        // Act
+        var cut = RenderComponent<ProductCard>(param => param.Add(p => p.Product, product));
+        var anchorElement = cut.Find("a");
+        var href = anchorElement.GetAttribute("href");
+
+        // Assert
+        Assert.Equal(expectedURL, href);
     }
 }
