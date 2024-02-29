@@ -30,6 +30,13 @@
         var cut = RenderComponent<ProductCard>(param => param.Add(p => p.Product, product));
         // Assert
         Assert.Contains("Title", cut.Markup);
+        Assert.Contains("A short description", cut.Markup);
+        Assert.Contains("A name", cut.Markup);
+        Assert.Contains("A name", cut.Markup);
+        Assert.Contains("https://someurl", cut.Markup);
+        Assert.Contains("7", cut.Markup);
+        Assert.Contains("2000", cut.Markup);
+        Assert.Contains("Comedy", cut.Markup);
     }
 
     [Fact]
