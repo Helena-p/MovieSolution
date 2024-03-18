@@ -2,6 +2,7 @@
 using MovieSolution.Entities;
 using MovieSolution.Models;
 using MovieSolution.Services.Interfaces;
+using MovieSolution.Shared.Components;
 
 namespace MovieSolution.Pages
 {
@@ -14,6 +15,7 @@ namespace MovieSolution.Pages
         public List<ProductCategory> Categories { get; set; } = new();
         protected bool IsSaved = false;
         protected string ErrorMessage = string.Empty;
+        ShopNavigationLock? NavigationLock { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -28,6 +30,8 @@ namespace MovieSolution.Pages
             {
                 Movie = new();
                 IsSaved = true;
+                // Inform EditContext the model is unmodified ie saved.
+                NavigationLock.CurrentEditContext.MarkAsUnmodified();
                 StateHasChanged();
                 ErrorMessage = string.Empty;
             }

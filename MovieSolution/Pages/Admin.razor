@@ -16,6 +16,7 @@
                 <EditForm Model="@Movie" OnValidSubmit="HandleValidSubmit">
                     <div class="row g-2">
                         <DataAnnotationsValidator />
+                        <ShopNavigationLock @ref="NavigationLock" />
                         <div class="col-12">
                             <label for="Title" class="form-label">Title:</label>
                             <InputText id="Title" @bind-Value="@Movie.Title" class="form-control" />

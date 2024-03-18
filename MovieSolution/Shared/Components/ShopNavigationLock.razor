@@ -1,0 +1,44 @@
+﻿@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+<NavigationLock ConfirmExternalNavigation="@(CurrentEditContext.IsModified() && CheckNavigation)" OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+
+@code {
+    [CascadingParameter]
+    public required EditContext CurrentEditContext { get; set; }
+    public string InternalNavigationMessage { get; set; } = "You have unsaved changes - do you want to save your data first?";
+    public bool CheckNavigation { get; set; } = true; // Define CheckNavigation property and set default value
+
+    // Listen (subscribe) for changes in EditForm context
+    protected override Task OnInitializedAsync()
+    {
+        CurrentEditContext.OnFieldChanged += OnFieldChangedAsync;
+        return base.OnInitializedAsync();
+    }
+
+    private async void OnFieldChangedAsync(object? sender, FieldChangedEventArgs args)
+    {
+        // Update component if changes have been made
+        // InvokeAsync is needed since the call comes from another thread
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // Cleanup
+    void IDisposable.Dispose()
+    {
+        CurrentEditContext.OnFieldChanged -= OnFieldChangedAsync;
+    }
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        if(CurrentEditContext.IsModified() && CheckNavigation)
+        {
+            var isConfirmed = await JSRuntime.InvokeAsync<bool>("confirm", InternalNavigationMessage);
+
+            if(!isConfirmed)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+}
